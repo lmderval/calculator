@@ -1,6 +1,7 @@
 package calculator.ast.binary;
 
 import calculator.ast.ASTNode;
+import calculator.visitor.IVisitor;
 
 public class MulBinaryASTNode extends BinaryASTNode {
     public MulBinaryASTNode(ASTNode left, ASTNode right) {
@@ -8,11 +9,7 @@ public class MulBinaryASTNode extends BinaryASTNode {
     }
 
     @Override
-    public void printAST() {
-        System.out.print("(");
-        left.printAST();
-        System.out.print("*");
-        right.printAST();
-        System.out.print(")");
+    public <T> T accept(IVisitor<T> visitor) {
+        return visitor.visit(this);
     }
 }

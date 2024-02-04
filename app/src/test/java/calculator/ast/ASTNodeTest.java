@@ -1,6 +1,5 @@
 package calculator.ast;
 
-import calculator.App;
 import calculator.ast.binary.AddBinaryASTNode;
 import calculator.ast.binary.BinaryASTNode;
 import calculator.ast.binary.MulBinaryASTNode;
@@ -8,7 +7,7 @@ import calculator.ast.unary.MinusUnaryASTNode;
 import calculator.ast.unary.UnaryASTNode;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ASTNodeTest {
     @Test

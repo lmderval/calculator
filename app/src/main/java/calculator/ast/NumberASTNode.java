@@ -1,7 +1,8 @@
 package calculator.ast;
 
-public class NumberASTNode extends ASTNode {
+import calculator.visitor.IVisitor;
 
+public class NumberASTNode extends ASTNode {
     private final int value;
 
     public NumberASTNode(int value) {
@@ -9,8 +10,8 @@ public class NumberASTNode extends ASTNode {
     }
 
     @Override
-    public void printAST() {
-        System.out.print(value);
+    public <T> T accept(IVisitor<T> visitor) {
+        return visitor.visit(this);
     }
 
     public int getValue() {

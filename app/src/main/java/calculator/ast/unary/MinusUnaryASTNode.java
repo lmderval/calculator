@@ -1,6 +1,7 @@
 package calculator.ast.unary;
 
 import calculator.ast.ASTNode;
+import calculator.visitor.IVisitor;
 
 public class MinusUnaryASTNode extends UnaryASTNode {
     public MinusUnaryASTNode(ASTNode node) {
@@ -8,8 +9,7 @@ public class MinusUnaryASTNode extends UnaryASTNode {
     }
 
     @Override
-    public void printAST() {
-        System.out.print("-");
-        node.printAST();
+    public <T> T accept(IVisitor<T> visitor) {
+        return visitor.visit(this);
     }
 }

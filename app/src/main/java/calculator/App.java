@@ -8,6 +8,9 @@ import calculator.ast.NumberASTNode;
 import calculator.ast.binary.AddBinaryASTNode;
 import calculator.ast.binary.MulBinaryASTNode;
 import calculator.ast.unary.MinusUnaryASTNode;
+import calculator.visitor.EvaluateVisitor;
+import calculator.visitor.IVisitor;
+import calculator.visitor.PrintVisitor;
 
 public class App {
     public static void main(String[] args) {
@@ -20,6 +23,13 @@ public class App {
                         new NumberASTNode(2)
                 )
         );
-        node.printAST();
+
+        PrintVisitor printVisitor = new PrintVisitor();
+        node.accept(printVisitor);
+
+        EvaluateVisitor evaluateVisitor = new EvaluateVisitor();
+        int result = node.accept(evaluateVisitor);
+
+        System.out.println("=" + result);
     }
 }

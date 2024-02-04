@@ -1,6 +1,7 @@
 package calculator.ast;
 
-public abstract class ASTNode {
+import calculator.visitor.IVisitor;
 
-    public abstract void printAST();
+public abstract class ASTNode {
+    public abstract <T> T accept(IVisitor<T> visitor);
 }
