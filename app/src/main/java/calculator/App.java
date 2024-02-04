@@ -3,12 +3,23 @@
  */
 package calculator;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import calculator.ast.ASTNode;
+import calculator.ast.NumberASTNode;
+import calculator.ast.binary.AddBinaryASTNode;
+import calculator.ast.binary.MulBinaryASTNode;
+import calculator.ast.unary.MinusUnaryASTNode;
 
+public class App {
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        ASTNode node = new AddBinaryASTNode(
+                new NumberASTNode(42),
+                new MulBinaryASTNode(
+                        new MinusUnaryASTNode(
+                                new NumberASTNode(21)
+                        ),
+                        new NumberASTNode(2)
+                )
+        );
+        node.printAST();
     }
 }
