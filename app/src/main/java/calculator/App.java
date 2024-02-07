@@ -9,7 +9,6 @@ import calculator.ast.binary.AddBinaryASTNode;
 import calculator.ast.binary.MulBinaryASTNode;
 import calculator.ast.unary.MinusUnaryASTNode;
 import calculator.visitor.EvaluateVisitor;
-import calculator.visitor.IVisitor;
 import calculator.visitor.PrintVisitor;
 
 public class App {
