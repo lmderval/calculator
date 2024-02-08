@@ -115,6 +115,11 @@ public class Lexer implements ITokenProvider {
     }
 
     @Override
+    public int availableTokens() {
+        return tokenList.size();
+    }
+
+    @Override
     public Token peek(int n) throws InvalidTokenException {
         if (n < 0)
             throw new InvalidParameterException("must be positive");

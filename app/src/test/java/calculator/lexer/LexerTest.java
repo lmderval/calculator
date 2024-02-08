@@ -260,4 +260,41 @@ public class LexerTest {
             lexer.peek(6);
         });
     }
+
+    @Test
+    void availableTokens_oneToken() {
+        assertDoesNotThrow(() -> {
+            String input = "42";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(1);
+            assertEquals(1, lexer.availableTokens());
+        });
+    }
+
+    @Test
+    void availableTokens_fourTokens() {
+        assertDoesNotThrow(() -> {
+            String input = "30 + 12";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+            assertEquals(4, lexer.availableTokens());
+        });
+    }
+
+    @Test
+    void availableTokens_twoTokensThenPop() {
+        assertDoesNotThrow(() -> {
+            String input = "42";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+            assertEquals(2, lexer.availableTokens());
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(1, lexer.availableTokens());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+            assertEquals(0, lexer.availableTokens());
+        });
+    }
 }
