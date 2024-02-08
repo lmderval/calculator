@@ -1,6 +1,7 @@
 package calculator.lexer;
 
 import calculator.exception.InvalidTokenException;
+import calculator.token.Token;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

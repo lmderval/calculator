@@ -1,4 +1,4 @@
-package calculator.lexer;
+package calculator.token;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

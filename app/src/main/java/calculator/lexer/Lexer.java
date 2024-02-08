@@ -2,13 +2,15 @@ package calculator.lexer;
 
 import calculator.exception.EOIException;
 import calculator.exception.InvalidTokenException;
+import calculator.token.ITokenProvider;
+import calculator.token.Token;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.util.LinkedList;
 
-public class Lexer {
+public class Lexer implements ITokenProvider {
     private final InputStream is;
     private final LinkedList<Token> tokenList;
     private Character current;
@@ -84,7 +86,7 @@ public class Lexer {
         }
     }
 
-    private Token processToken() throws IOException, InvalidTokenException {
+    private Token processToken() throws InvalidTokenException, IOException {
         try {
             while (current == null || current == ' ') // Skip spaces
                 readChar();
@@ -101,11 +103,18 @@ public class Lexer {
         return processNumber();
     }
 
-    public void processTokens(int n) throws IOException, InvalidTokenException {
-        for (int i = 0; i < n; i++)
-            tokenList.add(processToken());
+    @Override
+    public void processTokens(int n) throws InvalidTokenException {
+        for (int i = 0; i < n; i++) {
+            try {
+                tokenList.add(processToken());
+            } catch (IOException e) {
+                throw new InvalidTokenException("unable to process another token: " + i + " were processed");
+            }
+        }
     }
 
+    @Override
     public Token peek(int n) throws InvalidTokenException {
         if (n < 0)
             throw new InvalidParameterException("must be positive");
@@ -116,6 +125,7 @@ public class Lexer {
         return tokenList.get(n);
     }
 
+    @Override
     public Token pop() throws InvalidTokenException {
         if (tokenList.isEmpty())
             throw new InvalidTokenException("unable to pop a token");
