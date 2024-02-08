@@ -1,11 +1,12 @@
 package calculator.lexer;
 
+import calculator.exception.InvalidTokenException;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.security.InvalidParameterException;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LexerTest {
     @Test
@@ -104,6 +105,158 @@ public class LexerTest {
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
             assertEquals(new Token(Token.Type.NUMBER, 28), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_notValidNumber() {
+        assertThrows(InvalidTokenException.class, () -> {
+            String input = "a";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+        });
+    }
+
+    @Test
+    void processTokens_notValidNumberInsideCalculation() {
+        assertThrows(InvalidTokenException.class, () -> {
+            String input = "42+a";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+        });
+    }
+
+    @Test
+    void processTokens_notEnoughProcessedToken() {
+        assertThrows(InvalidTokenException.class, () -> {
+            String input = "14+28";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+            assertEquals(new Token(Token.Type.NUMBER, 14), lexer.pop());
+            assertEquals(new Token(Token.Type.PLUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 28), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_invalidTokenNotProcessed() {
+        assertDoesNotThrow(() -> {
+            String input = "42*a";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_processAfterEOI() {
+        assertDoesNotThrow(() -> {
+            String input = "42";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(5);
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_operatorAtTheEnd() {
+        assertDoesNotThrow(() -> {
+            String input = "42+";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(3);
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.PLUS), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_numberInsideParentheses() {
+        assertDoesNotThrow(() -> {
+            String input = "(42)";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+            assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_hugeNumber() {
+        assertThrows(InvalidTokenException.class, () -> {
+            String input = "546736573825856837268";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+        });
+    }
+
+    @Test
+    void peek_firstToken() {
+        assertDoesNotThrow(() -> {
+            String input = "42";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.peek(0));
+            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void peek_fifthToken() {
+        assertDoesNotThrow(() -> {
+            String input = "2*(11+10)";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(8);
+            assertEquals(new Token(Token.Type.PLUS), lexer.peek(4));
+            assertEquals(new Token(Token.Type.NUMBER, 2), lexer.pop());
+            assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
+            assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 11), lexer.pop());
+            assertEquals(new Token(Token.Type.PLUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 10), lexer.pop());
+            assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_negativePeek() {
+        assertThrows(InvalidParameterException.class, () -> {
+            String input = "(42)";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+            lexer.peek(-1);
+        });
+    }
+
+    @Test
+    void processTokens_outOfBoundsPeek() {
+        assertThrows(InvalidTokenException.class, () -> {
+            String input = "2*(11+10)";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+            lexer.peek(6);
         });
     }
 }
