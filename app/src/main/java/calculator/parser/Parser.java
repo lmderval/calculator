@@ -17,12 +17,12 @@ public class Parser {
         this.tokenProvider = tokenProvider;
     }
 
-    private Token peekToken(int n) throws InvalidTokenException {
-        if (tokenProvider.availableTokens() < n + 1) {
-            tokenProvider.processTokens(n + 1);
+    private Token peekToken() throws InvalidTokenException {
+        if (tokenProvider.availableTokens() < 1) {
+            tokenProvider.processTokens(1);
         }
 
-        return tokenProvider.peek(n);
+        return tokenProvider.peek(0);
     }
 
     private Token popToken() throws InvalidTokenException {
@@ -34,7 +34,7 @@ public class Parser {
     }
 
     public ASTNode parseExpr() throws InvalidTokenException, UnexpectedTokenException {
-        Token token = peekToken(0);
+        Token token = peekToken();
         if (token.getType() == Token.Type.END_OF_INPUT) {
             return new NumberASTNode(0);
         }
@@ -46,7 +46,7 @@ public class Parser {
         }
 
         ASTNode node = parseSum();
-        token = peekToken(0);
+        token = peekToken();
         if (token.getType() != Token.Type.RIGHT_PARENTHESIS
                 && token.getType() != Token.Type.END_OF_INPUT) {
             throw new UnexpectedTokenException(token);
@@ -56,7 +56,7 @@ public class Parser {
     }
 
     public ASTNode parseSum() throws InvalidTokenException, UnexpectedTokenException {
-        Token token = peekToken(0);
+        Token token = peekToken();
         if (token.getType() != Token.Type.NUMBER
                 && token.getType() != Token.Type.LEFT_PARENTHESIS
                 && token.getType() != Token.Type.MINUS) {
@@ -64,11 +64,11 @@ public class Parser {
         }
 
         ASTNode node = parseProd();
-        token = peekToken(0);
+        token = peekToken();
         while (token.getType() == Token.Type.PLUS) {
             tokenProvider.pop();
 
-            token = peekToken(0);
+            token = peekToken();
             if (token.getType() != Token.Type.NUMBER
                     && token.getType() != Token.Type.LEFT_PARENTHESIS
                     && token.getType() != Token.Type.MINUS) {
@@ -76,7 +76,7 @@ public class Parser {
             }
 
             ASTNode right = parseProd();
-            token = peekToken(0);
+            token = peekToken();
             node = new AddBinaryASTNode(node, right);
         }
 
@@ -89,7 +89,7 @@ public class Parser {
     }
 
     public ASTNode parseProd() throws InvalidTokenException, UnexpectedTokenException {
-        Token token = peekToken(0);
+        Token token = peekToken();
         if (token.getType() != Token.Type.NUMBER
                 && token.getType() != Token.Type.LEFT_PARENTHESIS
                 && token.getType() != Token.Type.MINUS) {
@@ -97,11 +97,11 @@ public class Parser {
         }
 
         ASTNode node = parseTerm();
-        token = peekToken(0);
+        token = peekToken();
         while (token.getType() == Token.Type.MULTIPLY) {
             tokenProvider.pop();
 
-            token = peekToken(0);
+            token = peekToken();
             if (token.getType() != Token.Type.NUMBER
                     && token.getType() != Token.Type.LEFT_PARENTHESIS
                     && token.getType() != Token.Type.MINUS) {
@@ -109,7 +109,7 @@ public class Parser {
             }
 
             ASTNode right = parseTerm();
-            token = peekToken(0);
+            token = peekToken();
             node = new MulBinaryASTNode(node, right);
         }
 
