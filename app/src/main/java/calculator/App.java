@@ -4,24 +4,27 @@
 package calculator;
 
 import calculator.ast.ASTNode;
-import calculator.ast.NumberASTNode;
-import calculator.ast.binary.AddBinaryASTNode;
-import calculator.ast.binary.MulBinaryASTNode;
-import calculator.ast.unary.MinusUnaryASTNode;
+import calculator.exception.InvalidTokenException;
+import calculator.exception.UnexpectedTokenException;
+import calculator.lexer.Lexer;
+import calculator.parser.Parser;
 import calculator.visitor.EvaluateVisitor;
 import calculator.visitor.PrintVisitor;
 
+import java.io.ByteArrayInputStream;
+import java.util.Scanner;
+
 public class App {
-    public static void main(String[] args) {
-        ASTNode node = new AddBinaryASTNode(
-                new NumberASTNode(42),
-                new MulBinaryASTNode(
-                        new MinusUnaryASTNode(
-                                new NumberASTNode(21)
-                        ),
-                        new NumberASTNode(2)
-                )
-        );
+    public static final Scanner SCANNER = new Scanner(System.in);
+
+    public static void main(String[] args) throws InvalidTokenException, UnexpectedTokenException {
+        System.out.print("Enter an expression: ");
+        String expr = SCANNER.nextLine();
+        byte[] bytes = expr.trim().getBytes();
+
+        Lexer lexer = new Lexer(new ByteArrayInputStream(bytes));
+        Parser parser = new Parser(lexer);
+        ASTNode node = parser.parseExpr();
 
         PrintVisitor printVisitor = new PrintVisitor();
         node.accept(printVisitor);
