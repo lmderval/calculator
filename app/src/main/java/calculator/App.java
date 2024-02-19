@@ -4,8 +4,8 @@
 package calculator;
 
 import calculator.ast.ASTNode;
-import calculator.exception.InvalidTokenException;
-import calculator.exception.UnexpectedTokenException;
+import calculator.token.exception.InvalidTokenException;
+import calculator.parser.exception.UnexpectedTokenException;
 import calculator.lexer.Lexer;
 import calculator.parser.Parser;
 import calculator.visitor.EvaluateVisitor;
