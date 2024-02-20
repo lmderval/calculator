@@ -32,7 +32,7 @@ public class Lexer implements ITokenProvider {
     }
 
     private boolean isOperator() {
-        char[] delimiters = new char[]{'+', '-', '*', '(', ')'};
+        char[] delimiters = new char[]{'+', '-', '*', '/', '(', ')'};
         for (char delimiter : delimiters) {
             if (current == delimiter)
                 return true;
@@ -55,6 +55,9 @@ public class Lexer implements ITokenProvider {
             }
             case '*' -> {
                 return new Token(Token.Type.MULTIPLY);
+            }
+            case '/' -> {
+                return new Token(Token.Type.DIVIDE);
             }
             case '(' -> {
                 return new Token(Token.Type.LEFT_PARENTHESIS);
