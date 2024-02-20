@@ -3,7 +3,9 @@ package calculator.parser;
 import calculator.ast.ASTNode;
 import calculator.ast.NumberASTNode;
 import calculator.ast.binary.AddBinaryASTNode;
+import calculator.ast.binary.DivBinaryASTNode;
 import calculator.ast.binary.MulBinaryASTNode;
+import calculator.ast.binary.SubBinaryASTNode;
 import calculator.ast.unary.MinusUnaryASTNode;
 import calculator.token.exception.InvalidTokenException;
 import calculator.token.ITokenProvider;
@@ -65,6 +67,26 @@ public class ParserTest {
     }
 
     @Test
+    void parseExpr_simpleSubtraction() {
+        TestTokenProvider tokenProvider = TestTokenProvider.of(
+                new Token(Token.Type.NUMBER, 54),
+                new Token(Token.Type.MINUS),
+                new Token(Token.Type.NUMBER, 12),
+                new Token(Token.Type.END_OF_INPUT)
+        );
+        Parser parser = new Parser(tokenProvider);
+        assertDoesNotThrow(() -> {
+            ASTNode node = parser.parseExpr();
+            assertInstanceOf(SubBinaryASTNode.class, node);
+            SubBinaryASTNode sub = (SubBinaryASTNode) node;
+            assertInstanceOf(NumberASTNode.class, sub.getLeft());
+            assertInstanceOf(NumberASTNode.class, sub.getRight());
+            assertEquals(54, ((NumberASTNode) sub.getLeft()).getValue());
+            assertEquals(12, ((NumberASTNode) sub.getRight()).getValue());
+        });
+    }
+
+    @Test
     void parseExpr_simpleMultiplication() {
         TestTokenProvider tokenProvider = TestTokenProvider.of(
                 new Token(Token.Type.NUMBER, 2),
@@ -81,6 +103,26 @@ public class ParserTest {
             assertInstanceOf(NumberASTNode.class, mul.getRight());
             assertEquals(2, ((NumberASTNode) mul.getLeft()).getValue());
             assertEquals(21, ((NumberASTNode) mul.getRight()).getValue());
+        });
+    }
+
+    @Test
+    void parseExpr_simpleDivision() {
+        TestTokenProvider tokenProvider = TestTokenProvider.of(
+                new Token(Token.Type.NUMBER, 84),
+                new Token(Token.Type.DIVIDE),
+                new Token(Token.Type.NUMBER, 2),
+                new Token(Token.Type.END_OF_INPUT)
+        );
+        Parser parser = new Parser(tokenProvider);
+        assertDoesNotThrow(() -> {
+            ASTNode node = parser.parseExpr();
+            assertInstanceOf(DivBinaryASTNode.class, node);
+            DivBinaryASTNode div = (DivBinaryASTNode) node;
+            assertInstanceOf(NumberASTNode.class, div.getLeft());
+            assertInstanceOf(NumberASTNode.class, div.getRight());
+            assertEquals(84, ((NumberASTNode) div.getLeft()).getValue());
+            assertEquals(2, ((NumberASTNode) div.getRight()).getValue());
         });
     }
 
@@ -124,6 +166,28 @@ public class ParserTest {
             MinusUnaryASTNode neg = (MinusUnaryASTNode) node;
             assertInstanceOf(NumberASTNode.class, neg.getNode());
             assertEquals(42, ((NumberASTNode) neg.getNode()).getValue());
+        });
+    }
+
+    @Test
+    void parseExpr_subtractionWithNegativeNumber() {
+        TestTokenProvider tokenProvider = TestTokenProvider.of(
+                new Token(Token.Type.NUMBER, 30),
+                new Token(Token.Type.MINUS),
+                new Token(Token.Type.MINUS),
+                new Token(Token.Type.NUMBER, 12),
+                new Token(Token.Type.END_OF_INPUT)
+        );
+        Parser parser = new Parser(tokenProvider);
+        assertDoesNotThrow(() -> {
+            ASTNode node = parser.parseExpr();
+            assertInstanceOf(SubBinaryASTNode.class, node);
+            SubBinaryASTNode sub = (SubBinaryASTNode) node;
+            assertInstanceOf(NumberASTNode.class, sub.getLeft());
+            assertInstanceOf(MinusUnaryASTNode.class, sub.getRight());
+            MinusUnaryASTNode neg = (MinusUnaryASTNode) sub.getRight();
+            assertEquals(30, ((NumberASTNode) sub.getLeft()).getValue());
+            assertEquals(12, ((NumberASTNode) neg.getNode()).getValue());
         });
     }
 

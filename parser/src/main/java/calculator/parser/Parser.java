@@ -2,8 +2,7 @@ package calculator.parser;
 
 import calculator.ast.ASTNode;
 import calculator.ast.NumberASTNode;
-import calculator.ast.binary.AddBinaryASTNode;
-import calculator.ast.binary.MulBinaryASTNode;
+import calculator.ast.binary.*;
 import calculator.ast.unary.MinusUnaryASTNode;
 import calculator.token.exception.InvalidTokenException;
 import calculator.parser.exception.UnexpectedTokenException;
@@ -31,6 +30,24 @@ public class Parser {
         }
 
         return tokenProvider.pop();
+    }
+
+    private BinaryASTNode createBinaryASTNodeFrom(Token operator, ASTNode left, ASTNode right) throws UnexpectedTokenException {
+        switch (operator.getType()) {
+            case PLUS -> {
+                return new AddBinaryASTNode(left, right);
+            }
+            case MINUS -> {
+                return new SubBinaryASTNode(left, right);
+            }
+            case MULTIPLY -> {
+                return new MulBinaryASTNode(left, right);
+            }
+            case DIVIDE -> {
+                return new DivBinaryASTNode(left, right);
+            }
+            default -> throw new UnexpectedTokenException(operator);
+        }
     }
 
     public ASTNode parseExpr() throws InvalidTokenException, UnexpectedTokenException {
@@ -65,7 +82,8 @@ public class Parser {
 
         ASTNode node = parseProd();
         token = peekToken();
-        while (token.getType() == Token.Type.PLUS) {
+        while (token.getType() == Token.Type.PLUS || token.getType() == Token.Type.MINUS) {
+            Token operator = token;
             tokenProvider.pop();
 
             token = peekToken();
@@ -77,7 +95,7 @@ public class Parser {
 
             ASTNode right = parseProd();
             token = peekToken();
-            node = new AddBinaryASTNode(node, right);
+            node = createBinaryASTNodeFrom(operator, node, right);
         }
 
         if (token.getType() != Token.Type.RIGHT_PARENTHESIS
@@ -98,7 +116,8 @@ public class Parser {
 
         ASTNode node = parseTerm();
         token = peekToken();
-        while (token.getType() == Token.Type.MULTIPLY) {
+        while (token.getType() == Token.Type.MULTIPLY || token.getType() == Token.Type.DIVIDE) {
+            Token operator = token;
             tokenProvider.pop();
 
             token = peekToken();
@@ -110,10 +129,11 @@ public class Parser {
 
             ASTNode right = parseTerm();
             token = peekToken();
-            node = new MulBinaryASTNode(node, right);
+            node = createBinaryASTNodeFrom(operator, node, right);
         }
 
         if (token.getType() != Token.Type.PLUS
+                && token.getType() != Token.Type.MINUS
                 && token.getType() != Token.Type.RIGHT_PARENTHESIS
                 && token.getType() != Token.Type.END_OF_INPUT) {
             throw new UnexpectedTokenException(token);
