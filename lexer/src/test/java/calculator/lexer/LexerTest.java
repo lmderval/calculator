@@ -62,12 +62,44 @@ public class LexerTest {
     }
 
     @Test
+    void processTokens_smallDivision() {
+        assertDoesNotThrow(() -> {
+            String input = "84/2";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+            assertEquals(new Token(Token.Type.NUMBER, 84), lexer.pop());
+            assertEquals(new Token(Token.Type.DIVIDE), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 2), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
     void processTokens_sumWithParentheses() {
         assertDoesNotThrow(() -> {
             String input = "(32+10)";
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(6);
+            assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 32), lexer.pop());
+            assertEquals(new Token(Token.Type.PLUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, 10), lexer.pop());
+            assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_subtractionWithParentheses() {
+        assertDoesNotThrow(() -> {
+            String input = "84-(32+10)";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(8);
+            assertEquals(new Token(Token.Type.NUMBER, 84), lexer.pop());
+            assertEquals(new Token(Token.Type.MINUS), lexer.pop());
             assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
             assertEquals(new Token(Token.Type.NUMBER, 32), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
