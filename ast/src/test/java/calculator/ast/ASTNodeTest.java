@@ -3,6 +3,7 @@ package calculator.ast;
 import calculator.ast.binary.AddBinaryASTNode;
 import calculator.ast.binary.BinaryASTNode;
 import calculator.ast.binary.MulBinaryASTNode;
+import calculator.ast.binary.SubBinaryASTNode;
 import calculator.ast.unary.MinusUnaryASTNode;
 import calculator.ast.unary.UnaryASTNode;
 import org.junit.jupiter.api.Test;
@@ -26,12 +27,30 @@ class ASTNodeTest {
     }
 
     @Test
+    void getRight_singleSubBinaryASTNode() {
+        BinaryASTNode node = new SubBinaryASTNode(
+                new NumberASTNode(42),
+                new NumberASTNode(21)
+        );
+        assertEquals(21, ((NumberASTNode) node.getRight()).getValue());
+    }
+
+    @Test
     void getRight_singleMulBinaryASTNode() {
         BinaryASTNode node = new MulBinaryASTNode(
                 new NumberASTNode(42),
                 new NumberASTNode(21)
         );
         assertEquals(21, ((NumberASTNode) node.getRight()).getValue());
+    }
+
+    @Test
+    void getLeft_singleDivBinaryASTNode() {
+        BinaryASTNode node = new MulBinaryASTNode(
+                new NumberASTNode(42),
+                new NumberASTNode(21)
+        );
+        assertEquals(42, ((NumberASTNode) node.getLeft()).getValue());
     }
 
     @Test
