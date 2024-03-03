@@ -15,5 +15,5 @@ PROD = TERM { ( '*' | '/' ) TERM } ;
 TERM = [ '-' ] ( number | '(' EXPR ')' ) ;
 
 eof = \n
-number = [0-9]+
+number = ([0-9]+j?|j)
 ```
