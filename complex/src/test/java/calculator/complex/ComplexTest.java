@@ -53,6 +53,14 @@ public class ComplexTest {
     }
 
     @Test
+    void neg_complex() {
+        Complex z = new Complex(4, -2);
+        Complex actual = z.neg();
+        Complex expected = new Complex(-4, 2);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void toString_zero() {
         Complex z = new Complex();
         assertEquals("0", z.toString());

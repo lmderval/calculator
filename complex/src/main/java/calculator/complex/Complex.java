@@ -30,6 +30,10 @@ public class Complex {
         return new Complex(re, im);
     }
 
+    public Complex neg() {
+        return new Complex(-re, -im);
+    }
+
     public boolean isZero() {
         return re == 0 && im == 0;
     }
