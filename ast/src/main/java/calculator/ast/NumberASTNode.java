@@ -1,5 +1,6 @@
 package calculator.ast;
 
+import calculator.complex.Complex;
 import calculator.visitor.IVisitor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class NumberASTNode extends ASTNode {
-    private final int value;
+    private final Complex value;
 
     @Override
     public <T> T accept(IVisitor<T> visitor) {

@@ -4,6 +4,7 @@
 package calculator;
 
 import calculator.ast.ASTNode;
+import calculator.complex.Complex;
 import calculator.token.exception.InvalidTokenException;
 import calculator.parser.exception.UnexpectedTokenException;
 import calculator.lexer.Lexer;
@@ -30,7 +31,7 @@ public class App {
         node.accept(printVisitor);
 
         EvaluateVisitor evaluateVisitor = new EvaluateVisitor();
-        int result = node.accept(evaluateVisitor);
+        Complex result = node.accept(evaluateVisitor);
 
         System.out.println("=" + result);
     }

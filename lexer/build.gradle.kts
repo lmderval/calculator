@@ -4,5 +4,6 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":complex"))
     implementation(project(":token"))
 }

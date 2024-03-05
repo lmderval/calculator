@@ -1,5 +1,6 @@
 package calculator.lexer;
 
+import calculator.complex.Complex;
 import calculator.lexer.exception.EOIException;
 import calculator.token.exception.InvalidTokenException;
 import calculator.token.ITokenProvider;
@@ -83,7 +84,7 @@ public class Lexer implements ITokenProvider {
         }
 
         try {
-            return new Token(Token.Type.NUMBER, Integer.parseInt(sb.toString()));
+            return new Token(Token.Type.NUMBER, new Complex(Integer.parseInt(sb.toString()), 0));
         } catch (NumberFormatException e) {
             throw new InvalidTokenException(sb + " is not a valid number");
         }

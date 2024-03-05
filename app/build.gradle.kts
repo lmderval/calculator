@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":complex"))
     implementation(project(":token"))
     implementation(project(":lexer"))
     implementation(project(":ast"))

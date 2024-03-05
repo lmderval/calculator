@@ -4,6 +4,7 @@ import calculator.ast.ASTNode;
 import calculator.ast.NumberASTNode;
 import calculator.ast.binary.*;
 import calculator.ast.unary.MinusUnaryASTNode;
+import calculator.complex.Complex;
 import calculator.token.exception.InvalidTokenException;
 import calculator.parser.exception.UnexpectedTokenException;
 import calculator.token.ITokenProvider;
@@ -53,7 +54,7 @@ public class Parser {
     public ASTNode parseExpr() throws InvalidTokenException, UnexpectedTokenException {
         Token token = peekToken();
         if (token.getType() == Token.Type.END_OF_INPUT) {
-            return new NumberASTNode(0);
+            return new NumberASTNode(new Complex());
         }
 
         if (token.getType() != Token.Type.NUMBER

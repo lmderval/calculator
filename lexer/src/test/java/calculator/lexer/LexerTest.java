@@ -1,5 +1,6 @@
 package calculator.lexer;
 
+import calculator.complex.Complex;
 import calculator.token.exception.InvalidTokenException;
 import calculator.token.Token;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(2);
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -42,7 +43,7 @@ public class LexerTest {
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(3);
             assertEquals(new Token(Token.Type.MINUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -54,9 +55,9 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(4);
-            assertEquals(new Token(Token.Type.NUMBER, 2), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(2, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 21), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(21, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -68,9 +69,9 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(4);
-            assertEquals(new Token(Token.Type.NUMBER, 84), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(84, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.DIVIDE), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 2), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(2, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -83,9 +84,9 @@ public class LexerTest {
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(6);
             assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 32), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(32, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 10), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(10, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
@@ -98,12 +99,12 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(8);
-            assertEquals(new Token(Token.Type.NUMBER, 84), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(84, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.MINUS), lexer.pop());
             assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 32), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(32, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 10), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(10, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
@@ -116,12 +117,12 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(8);
-            assertEquals(new Token(Token.Type.NUMBER, 2), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(2, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
             assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 11), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(11, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 10), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(10, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
@@ -134,9 +135,9 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(4);
-            assertEquals(new Token(Token.Type.NUMBER, 14), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(14, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 28), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(28, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -168,9 +169,9 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(2);
-            assertEquals(new Token(Token.Type.NUMBER, 14), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(14, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 28), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(28, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -182,7 +183,7 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(2);
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
         });
     }
@@ -194,7 +195,7 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(5);
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
@@ -209,7 +210,7 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(3);
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
@@ -223,7 +224,7 @@ public class LexerTest {
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(4);
             assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
@@ -246,8 +247,8 @@ public class LexerTest {
             ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(2);
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.peek(0));
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.peek(0));
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
     }
@@ -260,12 +261,12 @@ public class LexerTest {
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(8);
             assertEquals(new Token(Token.Type.PLUS), lexer.peek(4));
-            assertEquals(new Token(Token.Type.NUMBER, 2), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(2, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
             assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 11), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(11, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.PLUS), lexer.pop());
-            assertEquals(new Token(Token.Type.NUMBER, 10), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(10, 0)), lexer.pop());
             assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
         });
@@ -323,7 +324,7 @@ public class LexerTest {
             Lexer lexer = new Lexer(bais);
             lexer.processTokens(2);
             assertEquals(2, lexer.availableTokens());
-            assertEquals(new Token(Token.Type.NUMBER, 42), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
             assertEquals(1, lexer.availableTokens());
             assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
             assertEquals(0, lexer.availableTokens());

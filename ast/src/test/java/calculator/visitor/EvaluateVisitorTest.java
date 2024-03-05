@@ -7,6 +7,7 @@ import calculator.ast.binary.DivBinaryASTNode;
 import calculator.ast.binary.MulBinaryASTNode;
 import calculator.ast.binary.SubBinaryASTNode;
 import calculator.ast.unary.MinusUnaryASTNode;
+import calculator.complex.Complex;
 import calculator.visitor.EvaluateVisitor;
 import org.junit.jupiter.api.Test;
 
@@ -16,56 +17,56 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class EvaluateVisitorTest {
     @Test
     void accept_simpleNumberASTNode() {
-        ASTNode node = new NumberASTNode(42);
+        ASTNode node = new NumberASTNode(new Complex(42, 0));
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(42, node.accept(visitor));
+        assertEquals(new Complex(42, 0), node.accept(visitor));
     }
 
     @Test
     void accept_simpleAddBinaryASTNode() {
         ASTNode node = new AddBinaryASTNode(
-                new NumberASTNode(32),
-                new NumberASTNode(10)
+                new NumberASTNode(new Complex(32, 0)),
+                new NumberASTNode(new Complex(10, 0))
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(42, node.accept(visitor));
+        assertEquals(new Complex(42, 0), node.accept(visitor));
     }
 
     @Test
     void accept_simpleSubBinaryASTNode() {
         ASTNode node = new SubBinaryASTNode(
-                new NumberASTNode(52),
-                new NumberASTNode(10)
+                new NumberASTNode(new Complex(52, 0)),
+                new NumberASTNode(new Complex(10, 0))
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(42, node.accept(visitor));
+        assertEquals(new Complex(42, 0), node.accept(visitor));
     }
 
     @Test
     void accept_simpleMulASTNode() {
         ASTNode node = new MulBinaryASTNode(
-                new NumberASTNode(21),
-                new NumberASTNode(2)
+                new NumberASTNode(new Complex(21, 0)),
+                new NumberASTNode(new Complex(2, 0))
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(42, node.accept(visitor));
+        assertEquals(new Complex(42, 0), node.accept(visitor));
     }
 
     @Test
     void accept_simpleDivASTNode() {
         ASTNode node = new DivBinaryASTNode(
-                new NumberASTNode(84),
-                new NumberASTNode(2)
+                new NumberASTNode(new Complex(84, 0)),
+                new NumberASTNode(new Complex(2, 0))
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(42, node.accept(visitor));
+        assertEquals(new Complex(42, 0), node.accept(visitor));
     }
 
     @Test
     void accept_divisionByZero() {
         ASTNode node = new DivBinaryASTNode(
-                new NumberASTNode(42),
-                new NumberASTNode(0)
+                new NumberASTNode(new Complex(42, 0)),
+                new NumberASTNode(new Complex())
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
         assertThrows(ArithmeticException.class, () -> node.accept(visitor));
@@ -74,21 +75,21 @@ class EvaluateVisitorTest {
     @Test
     void accept_simpleMinusUnaryASTNode() {
         ASTNode node = new MinusUnaryASTNode(
-                new NumberASTNode(42)
+                new NumberASTNode(new Complex(42, 0))
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(-42, node.accept(visitor));
+        assertEquals(new Complex(-42, 0), node.accept(visitor));
     }
 
     @Test
     void accept_subtractionWithMinusUnary() {
         ASTNode node = new SubBinaryASTNode(
-                new NumberASTNode(32),
+                new NumberASTNode(new Complex(32, 0)),
                 new MinusUnaryASTNode(
-                        new NumberASTNode(10)
+                        new NumberASTNode(new Complex(10, 0))
                 )
         );
         EvaluateVisitor visitor = new EvaluateVisitor();
-        assertEquals(42, node.accept(visitor));
+        assertEquals(new Complex(42, 0), node.accept(visitor));
     }
 }
