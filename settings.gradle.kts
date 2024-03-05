@@ -5,4 +5,4 @@ plugins {
 }
 
 rootProject.name = "Calculator"
-include("app", "token", "lexer", "ast", "parser")
+include("app", "token", "lexer", "ast", "parser", "complex")
