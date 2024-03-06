@@ -84,7 +84,18 @@ public class Lexer implements ITokenProvider {
         }
 
         try {
-            return new Token(Token.Type.NUMBER, new Complex(Integer.parseInt(sb.toString()), 0));
+            boolean imaginary = false;
+            int length = sb.length();
+            if (sb.charAt(length - 1) == 'j') {
+                imaginary = true;
+                if (length == 1) sb.setCharAt(0, '1');
+                else sb.deleteCharAt(length - 1);
+            }
+            int value = Integer.parseInt(sb.toString());
+            if (imaginary) {
+                return new Token(Token.Type.NUMBER, new Complex(0, value));
+            }
+            return new Token(Token.Type.NUMBER, new Complex(value, 0));
         } catch (NumberFormatException e) {
             throw new InvalidTokenException(sb + " is not a valid number");
         }

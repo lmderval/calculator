@@ -330,4 +330,101 @@ public class LexerTest {
             assertEquals(0, lexer.availableTokens());
         });
     }
+
+    @Test
+    void processTokens_oneImaginaryNumber() {
+        assertDoesNotThrow(() -> {
+            String input = "42j";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 42)), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_oneImaginaryUnit() {
+        assertDoesNotThrow(() -> {
+            String input = "j";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(2);
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 1)), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_simpleCalculationWithComplex() {
+        assertDoesNotThrow(() -> {
+            String input = "2*(11+10j)";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(8);
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(2, 0)), lexer.pop());
+            assertEquals(new Token(Token.Type.MULTIPLY), lexer.pop());
+            assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(11, 0)), lexer.pop());
+            assertEquals(new Token(Token.Type.PLUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 10)), lexer.pop());
+            assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_subtractionWithImaginaryUnit() {
+        assertDoesNotThrow(() -> {
+            String input = "42-j";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(4);
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
+            assertEquals(new Token(Token.Type.MINUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 1)), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_unexpectedImaginaryUnit() {
+        assertDoesNotThrow(() -> {
+            String input = "(42)j";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(5);
+            assertEquals(new Token(Token.Type.LEFT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(42, 0)), lexer.pop());
+            assertEquals(new Token(Token.Type.RIGHT_PARENTHESIS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 1)), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_oneNegativeImaginary() {
+        assertDoesNotThrow(() -> {
+            String input = "-42j";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(3);
+            assertEquals(new Token(Token.Type.MINUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 42)), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
+
+    @Test
+    void processTokens_negativeImaginaryUnit() {
+        assertDoesNotThrow(() -> {
+            String input = "-j";
+            ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
+            Lexer lexer = new Lexer(bais);
+            lexer.processTokens(3);
+            assertEquals(new Token(Token.Type.MINUS), lexer.pop());
+            assertEquals(new Token(Token.Type.NUMBER, new Complex(0, 1)), lexer.pop());
+            assertEquals(new Token(Token.Type.END_OF_INPUT), lexer.pop());
+        });
+    }
 }
